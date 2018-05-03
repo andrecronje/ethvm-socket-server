@@ -46,7 +46,7 @@ let events: Array<_event> = [{
             _blocks.forEach((_block: blockLayout, idx: number): void => {
                 blocks.unshift(_block)
             })
-            console.log(txs)
+            console.log(blocks)
             _cb(null, blocks)
         })
     }
