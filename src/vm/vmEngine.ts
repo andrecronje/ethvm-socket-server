@@ -20,12 +20,12 @@ var BN = require('bn.js')
 var VmEngine = ZeroClientProvider({
   // supports http and websockets
   // but defaults to infura's mainnet rest api
-  //rpcUrl: 'https://mainnet.infura.io',
+  rpcUrl: 'https://mainnet.infura.io',
   //rpcUrl: 'http://35.227.70.36:8545',
   // rpcUrl: 'http://35.225.202.139:9545',  // all synced
   // rpcUrl: 'wss://mainnet.infura.io/ws',
   // rpcUrl: 'ws://localhost:8545/ws',
-  rpcUrl: 'https://api.myetherwallet.com/eth',
+  //rpcUrl: 'https://api.myetherwallet.com/eth',
 })
 // VmEngine.addProvider(new CacheSubprovider())
 // VmEngine.addProvider(new RpcSubprovider({

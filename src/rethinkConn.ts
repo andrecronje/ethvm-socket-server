@@ -168,6 +168,34 @@ class RethinkDB {
             }));
         })
     }
+
+    getTotalTxs(hash: string, cb: (err: Error, result: any) => void): void {
+        var bhash = Buffer.from(hash.toLowerCase().replace('0x', ''), 'hex');
+         r.table("transactions").getAll(r.args([bhash]), { index: "cofrom" }).count().run(this.dbConn,function(err:Error,count:any){
+            if (err) cb(err, null);
+            else cb(null, count);
+     })
+    }
+
+    getTxsOfAddress(hash: string, cb: (err: Error, result: any) => void): void {
+
+        let _this = this
+        let sendResults = (_cursor: any) => {
+            _cursor.toArray((err: Error, results: Array<txLayout>) => {
+                if (err) cb(err, null)
+                else cb(null, results.map((_tx: txLayout) => {
+                    return new SmallTx(_tx).smallify()
+                }))
+            });
+        }
+        var bhash = Buffer.from(hash.toLowerCase().replace('0x', ''), 'hex');
+         r.table("transactions").getAll(r.args([bhash]), { index: "cofrom" }).limit(20).run(this.dbConn,function(err:Error,count:any){
+            if (err) cb(err, null);
+            else sendResults(count)
+     })
+    }
+
+    
     getBlock(hash: string, cb: (err: Error, result: any) => void): void {
         r.table('blocks').get(r.args([new Buffer(hash)])).run(this.dbConn, (err: Error, result: blockLayout) => {
             if (err) cb(err, null);
