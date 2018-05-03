@@ -50,7 +50,7 @@
         "@types/lodash": "^4.14.94",
         "@types/lokijs": "^1.5.0",
         "@types/lowdb": "^0.15.0",
-        "@types/node": "^8.5.1",
+        "@types/node": "^8.10.11",
         "@types/rethinkdb": "github:types/npm-rethinkdb",
         "@types/socket.io": "^1.4.31",
         "@types/yargs": "^10.0.0",

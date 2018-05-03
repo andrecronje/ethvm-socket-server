@@ -3512,11 +3512,11 @@ module.exports = require("http");
 
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const r = __webpack_require__(67);
 const configs_1 = __webpack_require__(11);
-const fs = __webpack_require__(68);
-const url_1 = __webpack_require__(69);
+const fs = __webpack_require__(67);
+const url_1 = __webpack_require__(68);
 const yargs_1 = __webpack_require__(32);
+const r = __webpack_require__(69);
 const datastores_1 = __webpack_require__(22);
 const libs_1 = __webpack_require__(16);
 class RethinkDB {
@@ -3659,6 +3659,26 @@ class RethinkDB {
             }));
         });
     }
+    getTotalTxs(hash, cb) {
+        var bhash = Buffer.from(hash.toLowerCase().replace('0x', ''), 'hex');
+        r.table("transactions").getAll(r.args([bhash]), { index: "cofrom" }).count().run(this.dbConn, function (err, count) {
+            if (err) cb(err, null);else cb(null, count);
+        });
+    }
+    getTxsOfAddress(hash, cb) {
+        let _this = this;
+        let sendResults = _cursor => {
+            _cursor.toArray((err, results) => {
+                if (err) cb(err, null);else cb(null, results.map(_tx => {
+                    return new libs_1.SmallTx(_tx).smallify();
+                }));
+            });
+        };
+        var bhash = Buffer.from(hash.toLowerCase().replace('0x', ''), 'hex');
+        r.table("transactions").getAll(r.args([bhash]), { index: "cofrom" }).limit(20).run(this.dbConn, function (err, count) {
+            if (err) cb(err, null);else sendResults(count);
+        });
+    }
     getBlock(hash, cb) {
         r.table('blocks').get(r.args([new Buffer(hash)])).run(this.dbConn, (err, result) => {
             if (err) cb(err, null);else cb(null, result);
@@ -3692,19 +3712,19 @@ exports.default = RethinkDB;
 /* 67 */
 /***/ (function(module, exports) {
 
-module.exports = require("rethinkdb");
+module.exports = require("fs");
 
 /***/ }),
 /* 68 */
 /***/ (function(module, exports) {
 
-module.exports = require("fs");
+module.exports = require("url");
 
 /***/ }),
 /* 69 */
 /***/ (function(module, exports) {
 
-module.exports = require("url");
+module.exports = require("rethinkdb");
 
 /***/ }),
 /* 70 */
@@ -4172,6 +4192,16 @@ let events = [{
     name: "getTokenBalance",
     onEvent: (_socket, _msg, _glob, _cb) => {
         _glob.vmE.getAllTokens(_msg, _cb);
+    }
+}, {
+    name: "getTotalTxs",
+    onEvent: (_socket, _msg, _glob, _cb) => {
+        _glob.rdb.getTotalTxs(_msg, _cb);
+    }
+}, {
+    name: "getTxs",
+    onEvent: (_socket, _msg, _glob, _cb) => {
+        _glob.rdb.getTxsOfAddress(_msg, _cb);
     }
 }, {
     name: "ethCall",
@@ -5582,7 +5612,7 @@ var utils = __webpack_require__(189);
 var tokenAbi = [{ "constant": true, "inputs": [{ "name": "", "type": "address" }], "name": "balanceOf", "outputs": [{ "name": "", "type": "uint256" }], "type": "function" }, { "constant": false, "inputs": [{ "name": "_to", "type": "address" }, { "name": "_value", "type": "uint256" }], "name": "transfer", "outputs": [{ "name": "success", "type": "bool" }], "type": "function" }, { "inputs": [], "type": "constructor" }];
 var BN = __webpack_require__(191);
 var VmEngine = ZeroClientProvider({
-    rpcUrl: 'https://api.myetherwallet.com/eth'
+    rpcUrl: 'https://mainnet.infura.io'
 });
 VmEngine.getBalance = function (args, a) {
     console.log("getbalance====== ==================");

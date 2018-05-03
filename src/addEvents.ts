@@ -4,15 +4,15 @@ import { txLayout, blockLayout } from '@/typeLayouts'
 import configs from '@/configs'
 import * as SocketIO from 'socket.io'
 import RethinkDB from '@/rethinkConn'
-import VmRunner from '@/vm/vmRunner'
-import VmEngine from '@/vm/vmEngine'
 import {common} from '@/libs'
+import  * as VmEngine  from '@/vm/vmEngine'
+import  VmRunner  from '@/vm/vmRunner'
+//import VmEngine from '@/vm/vmEngine'
 type CallbackFunction = (err: Error, result: any) => any;
 interface Iinstances {
     rdb: RethinkDB;
     vmR: VmRunner;
     vmE: VmEngine;
-
 }
 interface _event {
     name: string,
