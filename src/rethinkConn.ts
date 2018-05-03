@@ -66,10 +66,12 @@ class RethinkDB {
     }
 
     setAllEvents(): void {
+      console.log("setAllEvents")
         let _this = this
         r.table('blocks').changes().map((change) => {
             return change('new_val')
         }).merge((block: any) => {
+            console.log(block)
             return {
                 transactions: r.table('transactions').getAll(r.args(block('transactionHashes'))).coerceTo('array'),
                 blockStats: {
