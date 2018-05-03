@@ -39,6 +39,7 @@ class RethinkDB {
             })
         }
         let connectWithCert = (_cert: any) => {
+            console.log(process.env)
             let url = new URL(process.env[conf.env_url])
             tempConfig = {
                 host: url.hostname,
