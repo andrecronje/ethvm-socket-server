@@ -78,6 +78,7 @@ class RethinkDB {
             }
         }).run(_this.dbConn, (err, cursor) => {
             cursor.each((err: Error, block: blockLayout) => {
+                console.log(block)
                 if (!err) {
                     _this.vmRunner.setStateRoot(block.stateRoot)
                     let bstats = new BlockStats(block, block.transactions)
@@ -92,6 +93,8 @@ class RethinkDB {
                         _this.socketIO.to(txHash).emit(txHash + '_update', _tx)
                         return sTx.smallify()
                     }))
+                } else {
+                  console.log(err)
                 }
             });
         });
