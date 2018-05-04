@@ -179,7 +179,7 @@ class RethinkDB {
 
     getTotalTxs(hash: string, cb: (err: Error, result: any) => void): void {
         var bhash = Buffer.from(hash.toLowerCase().replace('0x', ''), 'hex');
-         r.table("transactions").getAll(r.args([bhash]), { index: "cofrom" }).count().run(this.dbConn,function(err:Error,count:any){
+         r.table("transactions").getAll(r.args([bhash])]).count().run(this.dbConn,function(err:Error,count:any){
             if (err) cb(err, null);
             else cb(null, count);
      })
@@ -199,7 +199,7 @@ class RethinkDB {
             });
         }
         var bhash = Buffer.from(hash.toLowerCase().replace('0x', ''), 'hex');
-         r.table("transactions").getAll(r.args([bhash]), { index: "cofrom" }).limit(20).run(this.dbConn,function(err:Error,count:any){
+         r.table("transactions").getAll(r.args([bhash])).limit(20).run(this.dbConn,function(err:Error,count:any){
             if (err) {
               console.log(err)
               cb(err, null);
