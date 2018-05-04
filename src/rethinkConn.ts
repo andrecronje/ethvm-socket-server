@@ -189,10 +189,14 @@ class RethinkDB {
         let sendResults = (_cursor: any) => {
             _cursor.toArray((err: Error, results: Array<txLayout>) => {
                 console.log("toArray")
-                if (err) cb(err, null)
-                else cb(null, results.map((_tx: txLayout) => {
+                if (err) {
+                  console.log(err)
+                  cb(err, null)
+                } else {
+                  cb(null, results.map((_tx: txLayout) => {
                     console.log("SmallTx")
                     return new SmallTx(_tx).smallify()
+                  }
                 }))
             });
         }
