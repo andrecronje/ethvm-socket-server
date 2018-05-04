@@ -201,7 +201,7 @@ class RethinkDB {
      })
     }
 
-    
+
     getBlock(hash: string, cb: (err: Error, result: any) => void): void {
         r.table('blocks').get(r.args([new Buffer(hash)])).run(this.dbConn, (err: Error, result: blockLayout) => {
             if (err) cb(err, null);
@@ -212,8 +212,8 @@ class RethinkDB {
     getTx(hash: string, cb: (err: Error, result: any) => void): void {
         r.table("transactions").get(r.args([new Buffer(hash)])).merge(function(_tx) {
             return {
-                trace: r.db("eth_mainnet").table('traces').get(_tx('hash')),
-                logs: r.db("eth_mainnet").table('logs').get(_tx('hash'))
+                trace: r.db("wan_mainnet").table('traces').get(_tx('hash')),
+                logs: r.db("wan_mainnet").table('logs').get(_tx('hash'))
             }
         }).run(this.dbConn, (err: Error, result: txLayout) => {
             if (err) cb(err, null)
