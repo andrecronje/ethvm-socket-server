@@ -124,6 +124,8 @@ class RethinkDB {
                 }))
             });
         }
+        console.log(address)
+        console.log(hash)
         if (!hash) {
             r.table("transactions").orderBy({ index: r.desc("numberAndHash") }).filter(
                 r.row("from").eq(r.args([new Buffer(address)])).or(r.row("to").eq(r.args([new Buffer(address)])))
@@ -184,7 +186,7 @@ class RethinkDB {
     }
 
     getTxsOfAddress(hash: string, cb: (err: Error, result: any) => void): void {
-
+        console.log("getTxsOfAddress")
         let _this = this
         let sendResults = (_cursor: any) => {
             _cursor.toArray((err: Error, results: Array<txLayout>) => {

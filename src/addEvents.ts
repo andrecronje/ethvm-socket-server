@@ -46,7 +46,6 @@ let events: Array<_event> = [{
             _blocks.forEach((_block: blockLayout, idx: number): void => {
                 blocks.unshift(_block)
             })
-            console.log(blocks)
             _cb(null, blocks)
         })
     }
@@ -58,7 +57,6 @@ let events: Array<_event> = [{
             _txs.forEach((_tx) => {
                 txs.unshift(_tx)
             })
-            console.log(txs)
             _cb(null, txs)
         })
     }
@@ -98,13 +96,14 @@ let events: Array<_event> = [{
 {
     name: "getTxs",
     onEvent: (_socket, _msg, _glob, _cb): void => {
+        console.log(_msg)
         _glob.rdb.getTxsOfAddress(_msg, _cb)
     }
 },
 {
     name: "ethCall",
     onEvent: (_socket, _msg: any, _glob, _cb): void => {
- 
+
         _glob.vmR.call(_msg, _cb)
     }
 }, {
@@ -128,11 +127,15 @@ let events: Array<_event> = [{
 }, {
     name: "getAddressTransactionPages",
     onEvent: (_socket, reqObj: any, _glob, _cb): void => {
+        console.log(reqObj)
         if (reqObj.hash && (!common.check.isBufferObject(reqObj.hash, 32) || !common.check.isNumber(reqObj.number))) _cb(common.newError(common.errors.notBuffer), null)
         else if(!common.check.isBufferObject(reqObj.address, 20))  _cb(common.newError(common.errors.notBuffer), null)
-        else _glob.rdb.getAddressTransactionPages(reqObj.address, reqObj.hash, reqObj.number, _cb)
+        else {
+          console.log(reqObj.address)
+          _glob.rdb.getAddressTransactionPages(reqObj.address, reqObj.hash, reqObj.number, _cb)
+        }
     }
-}] 
+}]
 let onConnection = (_socket: SocketIO.Socket, _rdb: RethinkDB, _vmR: VmRunner,_vmE: VmEngine) => {
     events.forEach((event: _event, idx: number) => {
         _socket.on(event.name, (msg: any, cb: CallbackFunction) => {
