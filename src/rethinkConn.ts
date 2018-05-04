@@ -190,16 +190,22 @@ class RethinkDB {
         let _this = this
         let sendResults = (_cursor: any) => {
             _cursor.toArray((err: Error, results: Array<txLayout>) => {
+                console.log("toArray")
                 if (err) cb(err, null)
                 else cb(null, results.map((_tx: txLayout) => {
+                    console.log("SmallTx")
                     return new SmallTx(_tx).smallify()
                 }))
             });
         }
         var bhash = Buffer.from(hash.toLowerCase().replace('0x', ''), 'hex');
          r.table("transactions").getAll(r.args([bhash]), { index: "cofrom" }).limit(20).run(this.dbConn,function(err:Error,count:any){
-            if (err) cb(err, null);
-            else sendResults(count)
+            if (err) {
+              console.log(err)
+              cb(err, null);
+            } else {
+              sendResults(count)
+            }
      })
     }
 
@@ -225,7 +231,6 @@ class RethinkDB {
 
     onNewBlock(_block: blockLayout) {
         let _this = this
-        console.log("go new block",_block.hash)
         this.socketIO.to('blocks').emit('newBlock', _block)
         ds.addBlock(_block)
     }
