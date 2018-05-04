@@ -71,7 +71,6 @@ class RethinkDB {
         r.table('blocks').changes().map((change) => {
             return change('new_val')
         }).merge((block: any) => {
-            console.log(block)
             return {
                 transactions: r.table('transactions').getAll(r.args(block('transactionHashes'))).coerceTo('array'),
                 blockStats: {
@@ -80,7 +79,6 @@ class RethinkDB {
             }
         }).run(_this.dbConn, (err, cursor) => {
             cursor.each((err: Error, block: blockLayout) => {
-                console.log(block)
                 if (!err) {
                     _this.vmRunner.setStateRoot(block.stateRoot)
                     let bstats = new BlockStats(block, block.transactions)
