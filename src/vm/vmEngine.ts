@@ -21,7 +21,7 @@ var VmEngine = ZeroClientProvider({
   // supports http and websockets
   // but defaults to infura's mainnet rest api
   //rpcUrl: 'https://mainnet.infura.io',
-  rpcUrl: 'https://node.cryptocurve.network',
+  rpcUrl: 'https://node.crypto.network',
   //rpcUrl: 'http://35.227.70.36:8545',
   // rpcUrl: 'http://35.225.202.139:9545',  // all synced
   // rpcUrl: 'wss://mainnet.infura.io/ws',
@@ -70,10 +70,9 @@ VmEngine.getAllTokens = function(args:any,a:any){
 
 
 
- 
+
 
 
 
 
 export default VmEngine
-

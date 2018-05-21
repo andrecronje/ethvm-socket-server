@@ -44,6 +44,7 @@ function ZeroClientProvider(opts = {}){
     const filterAndSubsSubprovider = new SubscriptionSubprovider()
     // forward subscription events through provider
     filterAndSubsSubprovider.on('data', (err, notification) => {
+      console.log(notification)
       engine.emit('data', err, notification)
     })
     engine.addProvider(filterAndSubsSubprovider)
